@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    overflow: scroll;
+  }
+
+  .content {
+    height: 40px;
+  }
+
+  #wrapper {
+    min-height: 10px;
+  }
+
+  #white_space {
+    height: 300px;
+  }
+
+  #container {    
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    align-items: center;
+    transform: translate(-50%, -50%);
+  }
+
+  h1 {
+    margin-top: 5vh;
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #333333;
+  }
+
+  #add_book_button, #find_book_button {
+    display: inline-block;
+    padding: 30px 50px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, #3ea6ff, #0077dd);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  #main_menu_button, #submit_book_button, #clear_form_button {
+    display: inline-block;
+    min-width: 150px;
+    padding: 20px 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, #3ea6ff, #0077dd);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 30px;
+  }
+
+  button:hover {
+    background: linear-gradient(to bottom, #0077dd, #3ea6ff);
+  }
+
+  button + button {
+    margin-left: 20px;
+  }
+
+  p {
+    font-family: Arial, sans-serif;
+    margin-bottom: 30px;
+  }
+
+  label {
+    font-family: Arial, sans-serif;
+  }
+
+  input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+table {
+  border-collapse: collapse;
+  margin-top: 5vh;
+  width: 100%;
+}
+
+thead {
+  background-color: #f5f5f5;
+}
+
+th {
+  padding: 12px;
+  font-weight: bold;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+tr {
+  background-color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #f2f2f2;
+}
+
+caption {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.table-bordered {
+  border: 1px solid #ddd;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}

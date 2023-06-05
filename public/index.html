@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>it21774 Books</title>
+    <link rel="stylesheet" href="style.css">
+<body>
+    <div id="wrapper">
+        <h1 class="content">Book Management Project</h1>
+        <div id="container" class="content">
+            <button id="add_book_button">Add Book</button>
+            <button id="find_book_button">Find Book</button>
+        </div>
+        <div id="white_space" class="content"></div>
+    </div>
+
+    <script type="text/javascript">
+        
+        class Book {
+            constructor (id, author, title, genre, price) {
+                this.id = id;
+                this.author = author;
+                this.title = title; 
+                this.genre = genre;
+                this.price = price;
+            }
+        }
+
+
+        /********************************
+        *********   MAIN MENU   *********
+        *********************************/
+        const addBookButton = document.getElementById('add_book_button');
+        const findBookButton = document.getElementById('find_book_button');
+        const container = document.getElementById('container');
+
+        addBookButton.addEventListener('click', function(e) { // 'add book' button listener
+            container.removeChild(findBookButton);
+            container.removeChild(addBookButton);
+            
+            container.appendChild(bookForm);
+            container.appendChild(submitBookButton);
+            container.appendChild(clearFormButton);
+            container.appendChild(mainMenuButton);
+        });
+
+        findBookButton.addEventListener('click', function(e) { // 'find book' button listener
+            var inputArray = document.getElementsByTagName('input');
+
+            for (let i = container.childNodes.length - 1; i >= 0; i--) {
+                container.removeChild(container.childNodes[i]);
+            }
+
+            container.appendChild(searchDiv);
+            container.appendChild(searchBookButton);
+            container.appendChild(mainMenuButton);
+        });
+
+
+        /****************************************
+        *********   'ADD BOOK' OPTION   *********
+        *****************************************/
+        const bookForm = document.createElement('form');
+
+
+        /*****  Author  *****/
+        const authorDiv = document.createElement('div'); // div
+        authorDiv.setAttribute('id', 'author_div');
+
+        const authorLabel = document.createElement('label'); // label
+        authorLabel.setAttribute('for', 'author');
+        authorLabelText = document.createTextNode('Author');
+        authorLabel.appendChild(authorLabelText);
+
+        const authorInput = document.createElement('input'); // input
+        authorInput.setAttribute('type', 'text');
+        authorInput.setAttribute('id', 'author');
+        authorInput.setAttribute('minlength', '5');
+        authorInput.setAttribute('maxlength', '25');
+        authorInput.setAttribute('placeholder', 'Kevin Stana');
+
+        authorDiv.appendChild(authorLabel);
+        authorDiv.appendChild(authorInput);
+
+        // error message if author is empty
+        const authorError = document.createElement('p');
+        const authorMsg = document.createTextNode('Author field must have at least 5 characters');
+        authorError.appendChild(authorMsg);
+        authorError.style.color = 'red';
+
+        // author input field listener 1
+        authorInput.addEventListener('click', function(e) {
+            if (authorDiv.children.length > 2) {
+                authorDiv.removeChild(authorError);
+            }
+        });
+
+        // author input field listener 2
+        authorInput.addEventListener('keydown', function(e) {
+            if (authorDiv.children.length > 2) {
+                authorDiv.removeChild(authorError);
+            }
+        });
+
+        /*****  Title  *****/
+        const titleDiv = document.createElement('div'); // div
+        titleDiv.setAttribute('id', 'title_div');
+
+        const titleLabel = document.createElement('label'); // label
+        titleLabel.setAttribute('for', 'title');
+        titleLabelText = document.createTextNode('Title');
+        titleLabel.appendChild(titleLabelText);
+
+        const titleInput = document.createElement('input'); // input
+        titleInput.setAttribute('type', 'text');
+        titleInput.setAttribute('id', 'title');
+        titleInput.setAttribute('minlength', '1');
+        titleInput.setAttribute('maxlength', '40');
+        titleInput.setAttribute('placeholder', 'My Super Book');
+
+        titleDiv.appendChild(titleLabel);
+        titleDiv.appendChild(titleInput);
+
+        // error message if title is empty
+        const titleError = document.createElement('p');
+        const titleMsg = document.createTextNode('Title field must have at least 1 character');
+        titleError.appendChild(titleMsg);
+        titleError.style.color = 'red';
+
+        // error message if a book with this title already exists
+        const existingTitleError = document.createElement('p');
+        const existingTitleMsg = document.createTextNode('A book with this title already exists');
+        existingTitleError.appendChild(existingTitleMsg);
+        existingTitleError.style.color = 'red';
+
+        // title input field listener 1
+        titleInput.addEventListener('click', function(e) {
+            for (let i = titleDiv.childNodes.length - 1; i > 1; i--) {
+                titleDiv.removeChild(titleDiv.childNodes[i]);
+            }
+        });
+
+        // title input field listener2
+        titleInput.addEventListener('keydown', function(e) {
+            for (let i = titleDiv.childNodes.length - 1; i > 1; i--) {
+                titleDiv.removeChild(titleDiv.childNodes[i]);
+            }
+        });
+
+
+        /*****   Price   *****/
+        const priceDiv = document.createElement('div'); // div
+        priceDiv.setAttribute('id', 'price_div');
+
+        const priceLabel = document.createElement('label'); // label
+        priceLabel.setAttribute('for', 'price');
+        priceLabelText = document.createTextNode('Price');
+        priceLabel.appendChild(priceLabelText);
+
+        const priceInput = document.createElement('input'); // input
+        priceInput.setAttribute('type', 'text');
+        priceInput.setAttribute('id', 'price');
+        priceInput.setAttribute('maxlength', '6');
+        priceInput.setAttribute('placeholder', '9.99');
+
+        priceDiv.appendChild(priceLabel);
+        priceDiv.appendChild(priceInput);
+
+        // error message if price is invalid
+        const priceError = document.createElement('p');
+        const msg = document.createTextNode('The price must be a number between 0.00 and 999.99');
+        priceError.appendChild(msg);
+        priceError.style.color = 'red';
+
+        // price input field listener 1
+        priceInput.addEventListener('click', function(e) {
+            if (priceDiv.children.length > 2) {
+                priceDiv.removeChild(priceError);
+            }
+        });
+
+        // price input field listener 2
+        priceInput.addEventListener('keydown', function(e) {
+            if (priceDiv.children.length > 2) {
+                priceDiv.removeChild(priceError);
+            }
+        });
+
+        /*****   Genre   *****/
+        const genreDiv = document.createElement('div'); // div
+        priceDiv.setAttribute('id', 'price_div');
+
+        const genreLabel = document.createElement('label'); // label
+        genreLabel.setAttribute('for', 'genre');
+        genreLabelText = document.createTextNode('Genre');
+        genreLabel.appendChild(genreLabelText);
+        
+        const genreSelect = document.createElement('select'); // drop-down list
+        genreSelect.setAttribute('id', 'genre');
+
+        // science fiction option
+        const scienceFiction = document.createElement('option');
+        scienceFiction.setAttribute('value', 'Science Fiction');
+        const scienceFictionText = document.createTextNode('Science Fiction');
+        scienceFiction.appendChild(scienceFictionText);
+        genreSelect.appendChild(scienceFiction);
+
+        // satire option
+        const satire = document.createElement('option');
+        satire.setAttribute('value', 'Satire');
+        const satireText = document.createTextNode('Satire');
+        satire.appendChild(satireText);
+        genreSelect.appendChild(satire);
+
+        // drama option
+        const drama = document.createElement('option');
+        drama.setAttribute('value', 'Drama');
+        const dramaText = document.createTextNode('Drama');
+        drama.appendChild(dramaText);
+        genreSelect.appendChild(drama);
+
+        // action and adventure option
+        const actionAndAdventure = document.createElement('option');
+        actionAndAdventure.setAttribute('value', 'Action and Adventure');
+        const actionAndAdventureText = document.createTextNode('Action and Adventure');
+        actionAndAdventure.appendChild(actionAndAdventureText);
+        genreSelect.appendChild(actionAndAdventure);
+
+        // romance option
+        const romance = document.createElement('option');
+        romance.setAttribute('value', 'Romance');
+        const romanceText = document.createTextNode('Romance');
+        romance.appendChild(romanceText);
+        genreSelect.appendChild(romance);
+
+        // mystery option
+        const mystery = document.createElement('option');
+        mystery.setAttribute('value', 'Mystery');
+        const mysteryText = document.createTextNode('Mystery');
+        mystery.appendChild(mysteryText);
+        genreSelect.appendChild(mystery);
+
+        // horror option
+        const horror = document.createElement('option');
+        horror.setAttribute('value', 'Horror');
+        const horrorText = document.createTextNode('Horror');
+        horror.appendChild(horrorText);
+        genreSelect.appendChild(horror);
+
+        genreDiv.appendChild(genreLabel);
+        genreDiv.appendChild(genreSelect);
+
+        bookForm.appendChild(authorDiv);
+        bookForm.appendChild(titleDiv);
+        bookForm.appendChild(priceDiv);
+        bookForm.appendChild(genreDiv);
+
+
+        /*****  Submit Button   *****/
+        const submitBookButton = document.createElement('button');
+        const submitBookButtonText = document.createTextNode('Submit');
+        submitBookButton.setAttribute('id', 'submit_book_button');
+        submitBookButton.appendChild(submitBookButtonText);
+
+        // 'Submit' button listener
+        submitBookButton.addEventListener('click', async function(e) {
+            var isValid = 0;
+            var price = priceInput.value;
+
+            // αυτο το for επειδή το 123a το έπαιρνε σαν 123
+            // https://stackoverflow.com/questions/94037/convert-character-to-ascii-code-in-javascript
+            for (let i = 0; i < price.length; i++) {
+                if ((price.charCodeAt(i) < 48 && price.charCodeAt(i) != 46) || (price.charCodeAt(i) > 57)) {
+                    isValid = 1;
+                    priceDiv.appendChild(priceError);
+                }
+            }
+
+            var floatPrice = parseFloat(priceInput.value);
+
+            if (isNaN(floatPrice)) {
+                priceDiv.appendChild(priceError);
+                isValid = 1;
+            } else if (price < 0 || price > 999.99) {
+                isValid = 1;
+                priceDiv.appendChild(priceError);
+            } 
+
+            if (authorInput.value.length < 5) {
+                isValid = 1;
+                authorDiv.appendChild(authorError);
+            }
+
+            if (titleInput.value.length < 1) {
+                isValid = 1;
+                titleDiv.appendChild(titleError);
+            }
+
+            if (isValid == 0) {
+                await addBook();
+            }
+            
+        });
+
+        async function addBook() {
+            const author = authorInput.value;
+            const title = titleInput.value;
+            const genre = genreSelect.value;
+            const price = priceInput.value;
+
+            const book = new Book(0, author, title, genre, price);
+
+            const url = 'http://localhost:3000/books';
+            try {
+                const result = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(book)
+                });
+                const rslt = await result.json();
+                // console.log(rslt);
+                if (rslt.result == "OK") {
+                    alert('Book added!');
+                    authorInput.value = '';
+                    titleInput.value = '';
+                    priceInput.value = '';
+                } else if (rslt.result == "Existing book") {
+                    titleDiv.appendChild(existingTitleError);
+                } else {
+                    alert('Something went wrong while contacting with the database.');
+                }
+            } catch (err) {
+                console.log(err);
+                alert('Something went wrong while contacting with the database.');
+            }
+        }
+
+        /*****  Clear Form Button   *****/
+        const clearFormButton = document.createElement('button');
+        const clearFormButtonText = document.createTextNode('Clear Form');
+        clearFormButton.setAttribute('id', 'clear_form_button');
+        clearFormButton.appendChild(clearFormButtonText);
+
+        clearFormButton.addEventListener('click', function(e) { // 'Clear Form' button listener
+            var inputArray = document.getElementsByTagName('input');
+            for (input of inputArray) {
+                if (input.type == 'text') {
+                    input.value = '';
+                }
+            }
+
+            if (priceDiv.children.length > 2) {
+                priceDiv.removeChild(priceError);
+            }
+
+            if (authorDiv.children.length > 2) {
+                authorDiv.removeChild(authorError);
+            }
+
+            if (titleDiv.children.length > 2) {
+                titleDiv.removeChild(titleError);
+            }
+        });
+
+
+        /*****   Main Menu Button   *****/
+        const mainMenuButton = document.createElement('button');
+        const mainMenuButtonText = document.createTextNode('Main Menu');
+        mainMenuButton.setAttribute('id', 'main_menu_button');
+        mainMenuButton.appendChild(mainMenuButtonText);
+
+        mainMenuButton.addEventListener('click', function(e) { // 'Main Menu' button listener
+            var inputArray = document.getElementsByTagName('input');
+            for (input of inputArray) {
+                if (input.type == 'text') {
+                    input.value = '';
+                }
+            }
+
+            for (let i = container.childNodes.length - 1; i >= 0; i--) {
+                container.removeChild(container.childNodes[i]);
+            }
+
+            for (let i = searchDiv.childNodes.length - 1; i > 1; i--) {
+                searchDiv.removeChild(searchDiv.childNodes[i]);
+            }
+        
+            container.appendChild(addBookButton);
+            container.appendChild(findBookButton);
+        });
+
+
+        /*****************************************
+        *********   'FIND BOOK' OPTION   *********
+        ******************************************/
+
+        /*****   Table for displaying search results   *****/
+        const resultsTable = document.createElement('table');
+        resultsTable.setAttribute('class', 'table-bordered');
+        const tableRow = document.createElement('tr');
+
+        // id header
+        const th_id = document.createElement('th');
+        const th_idText = document.createTextNode('ID');
+        th_id.appendChild(th_idText);
+        tableRow.append(th_id);
+
+        // author header
+        const th_author = document.createElement('th');
+        const th_authorText = document.createTextNode('Author');
+        th_author.appendChild(th_authorText);
+        tableRow.append(th_author);
+
+        //title header
+        const th_title = document.createElement('th');
+        const th_titleText = document.createTextNode('Title');
+        th_title.appendChild(th_titleText);
+        tableRow.append(th_title);
+
+        // genre header
+        const th_genre = document.createElement('th');
+        const th_genreText = document.createTextNode('Genre');
+        th_genre.appendChild(th_genreText);
+        tableRow.append(th_genre);
+
+        // price header
+        const th_price = document.createElement('th');
+        const th_priceText = document.createTextNode('Price');
+        th_price.appendChild(th_priceText);
+        tableRow.append(th_price);
+
+        resultsTable.appendChild(tableRow);
+
+
+        /*****   Search bar stuff   *****/
+        // search div
+        const searchDiv = document.createElement('div');
+        searchDiv.setAttribute('id', 'search_div');
+
+        // search label
+        const searchLabel = document.createElement('label');
+        searchLabel.setAttribute('for', 'search');
+        searchLabelText = document.createTextNode('Search');
+        searchLabel.appendChild(searchLabelText);
+
+        // search input
+        const searchInput = document.createElement('input');
+        searchInput.setAttribute('type', 'text');
+        searchInput.setAttribute('id', 'search');
+        searchInput.setAttribute('minlength', '1');
+        searchInput.setAttribute('maxlength', '40');
+        searchInput.setAttribute('placeholder', 'Enter a keyword');
+
+        searchDiv.appendChild(searchLabel);
+        searchDiv.appendChild(searchInput);
+
+        // search input field listener 1
+        searchInput.addEventListener('click', function(e) {
+            for (let i = searchDiv.childNodes.length - 1; i > 1; i--) {
+                searchDiv.removeChild(searchDiv.childNodes[i]);
+            }
+        });
+
+        // search input field listener2
+        searchInput.addEventListener('keydown', function(e) {
+            for (let i = searchDiv.childNodes.length - 1; i > 1; i--) {
+                searchDiv.removeChild(searchDiv.childNodes[i]);
+            }
+        });
+
+        // error message if search is empty
+        const searchError = document.createElement('p');
+        const searchMsg = document.createTextNode('You have to enter a keyword to search (from 1 to 40 characters long)');
+        searchError.appendChild(searchMsg);
+        searchError.style.color = 'red';
+
+        // error message if nothing was found
+        const noResults = document.createElement('p');
+        const noResultsMsg = document.createTextNode('Could not find any results for your input');
+        noResults.appendChild(noResultsMsg);
+        noResults.style.color = 'red';
+
+
+        /*****   'Search' Button   *****/
+        const searchBookButton = document.createElement('button');
+        const searchBookButtonText = document.createTextNode('Search');
+        searchBookButton.setAttribute('id', 'submit_book_button');
+        searchBookButton.appendChild(searchBookButtonText);
+
+        // 'Search' button listener
+        searchBookButton.addEventListener('click', async function(e) {
+            var isValid = 0;
+
+            // add error message
+            if (searchInput.value.length < 1) {
+                isValid = 1;
+                searchDiv.appendChild(searchError);
+                return;
+            }
+
+            // remove previous search results
+            if (isValid == 0) {
+                for (let i = resultsTable.childNodes.length - 1; i > 0; i--) {
+                    resultsTable.removeChild(resultsTable.childNodes[i]);
+                }
+
+                for (let i = container.childNodes.length - 1; i >= 0; i--) {
+                    if (container.childNodes[i] == resultsTable) {
+                        container.removeChild(container.childNodes[i]);
+                    }
+                }
+
+                await searchBook();
+            }
+            
+        });
+
+        async function searchBook() {
+            const keyword = searchInput.value;
+            const url = 'http://localhost:3000/books/' + keyword;
+            try {
+                const result = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                const books = await result.json();
+                console.log(books);
+                // if (books.code == 'SQLITE_ERROR') {
+                if (books.code) {
+                    alert('There was a problem while contacting with the database.');
+                    return;
+                }
+                if (books.length < 1) {
+                    searchDiv.appendChild(noResults);
+                } else {
+                    for (book of books) {
+                        const tableRow = document.createElement('tr');
+
+                        const td_id = document.createElement('td');
+                        const td_idText = document.createTextNode(`${book.id}`);
+                        td_id.appendChild(td_idText);
+
+                        const td_author = document.createElement('td');
+                        const td_authorText = document.createTextNode(`${book.author}`);
+                        td_author.appendChild(td_authorText);
+
+                        const td_title = document.createElement('td');
+                        const td_titleText = document.createTextNode(`${book.title}`);
+                        td_title.appendChild(td_titleText);
+
+                        const td_genre = document.createElement('td');
+                        const td_genreText = document.createTextNode(`${book.genre}`);
+                        td_genre.appendChild(td_genreText);
+
+                        const td_price = document.createElement('td');
+                        const td_priceText = document.createTextNode(`$${book.price}`);
+                        td_price.appendChild(td_priceText);
+
+                        tableRow.appendChild(td_id);
+                        tableRow.appendChild(td_author);
+                        tableRow.appendChild(td_title);
+                        tableRow.appendChild(td_genre);
+                        tableRow.appendChild(td_price);
+
+                        resultsTable.appendChild(tableRow);
+                    }
+
+                    container.appendChild(resultsTable);
+                }
+            } catch (err) {
+                alert('There was a problem while contacting with the database.');
+                console.log(err);
+            }
+        }
+    </script>
+</body>
+</html>
