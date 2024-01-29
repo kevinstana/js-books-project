@@ -26,9 +26,7 @@ module.exports = {
         });
     },
     getBookByKeyword: async function (keyword) {
-        // const query = `select * from books where title like "%${keyword}%"`;
 
-        // ChatGPT για το πως να κανω query για πολλα columns που μπορει να έχουν το keyword
         const query = `select * from books where author like "%${keyword}%" or title like "%${keyword}%" or genre like "%${keyword}%"`;
         const rows = await this.runQuery(query);
         bookList = [];
